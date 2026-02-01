@@ -1,0 +1,22 @@
+{
+  "name": "my-test-automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtm00029-rgb/my-test-automation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mtm00029-rgb/my-test-automation/issues"
+  },
+  "homepage": "https://github.com/mtm00029-rgb/my-test-automation#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.1",
+    "@types/node": "^25.1.0"
+  }
+}
