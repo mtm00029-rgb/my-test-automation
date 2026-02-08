@@ -1,0 +1,31 @@
+name: API Regression Test
+
+# 倉庫（main）にファイルが届いた時に動くよ！という合図
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    # GitHubが用意してくれる「貸切PC（Linux）」で動かします
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 倉庫からファイルをこの貸切PCに取り出す
+      - uses: actions/checkout@v4
+
+      # 2. Node.js（Newmanを動かすための土台）を準備する
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. Newman（調理ロボット）をインストールする
+      - name: Install Newman
+        run: npm install -g newman
+
+      # 4. さっきアップロードしたテストを実行する！
+      - name: Run API Tests
+        run: newman run tests/api/MyTest.postman_collection.json
