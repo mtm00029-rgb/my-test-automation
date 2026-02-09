@@ -1,0 +1,7 @@
+pm.test("Status code is 200", function () {
+pm.test("userIdが1であること", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.userId).to.eql(1);
+});
+    pm.response.to.have.status(200);
+});
