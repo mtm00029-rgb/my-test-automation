@@ -1,6 +1,5 @@
 name: API Regression Test
 
-# 倉庫（main）にファイルが届いた時に動くよ！という合図
 on:
   push:
     branches: [ main ]
@@ -9,23 +8,35 @@ on:
 
 jobs:
   test:
-    # GitHubが用意してくれる「貸切PC（Linux）」で動かします
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 倉庫からファイルをこの貸切PCに取り出す
       - uses: actions/checkout@v4
 
-      # 2. Node.js（Newmanを動かすための土台）を準備する
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # 3. Newman（調理ロボット）をインストールする
-      - name: Install Newman
-        run: npm install -g newman
+      # 3. Newmanと、Allure用の報告パーツをインストールする
+      - name: Install Newman and Reporter
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-allure
 
-      # 4. さっきアップロードしたテストを実行する！
+      # 4. テストを実行し、結果を「allure-results」というフォルダに保存する
       - name: Run API Tests
-        run: newman run tests/api/MyTest.postman_collection.json
+        run: newman run tests/api/MyTest.postman_collection.json -r allure
+
+      # 5. 【重要】保存した結果を、オシャレなHTMLレポート（allure-report）に変換する
+      - name: Generate Allure Report
+        run: |
+          npm install -g allure-commandline
+          allure generate allure-results --clean -o allure-report
+
+      # 6. 掲示板（GitHub Pages）に貼り出す
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
