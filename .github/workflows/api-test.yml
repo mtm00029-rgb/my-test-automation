@@ -27,6 +27,7 @@ jobs:
       # 4. テストを実行し、結果を「allure-results」というフォルダに保存する
       - name: Run API Tests
         run: newman run tests/api/MyTest.postman_collection.json -r allure
+        continue-on-error: true # ←「テストが失敗しても、次のレポート作成に進んでね！」という魔法
 
       # 5. 【重要】保存した結果を、オシャレなHTMLレポート（allure-report）に変換する
       - name: Generate Allure Report
